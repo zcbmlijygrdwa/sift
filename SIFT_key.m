@@ -1,6 +1,4 @@
-close all
-clear all
-
+function descriptorSet = SIFT_key(imgPath)
 addpath('~/matlabplugins')
 %based on https://blog.csdn.net/weixin_38404120/article/details/73740612
 %https://www.cnblogs.com/wangguchangqing/p/4853263.html
@@ -10,7 +8,7 @@ sigma  = 0.6;
 k = 1/4;
 
 % load image
-img = imread('test2.jpg');
+img = imread(imgPath);
 img = rgb2gray(img);
 img = imresize(img,0.5);
 %imshow(img)
@@ -199,6 +197,8 @@ end
 figure()
 imshow(discriptorImage);
 
+
+end
 
 
 

@@ -1,4 +1,4 @@
-function descriptorSet = SIFT_key(imgPath)
+function descriptorSet = SIFT_key(img)
 addpath('~/matlabplugins')
 %based on https://blog.csdn.net/weixin_38404120/article/details/73740612
 %https://www.cnblogs.com/wangguchangqing/p/4853263.html
@@ -7,10 +7,7 @@ addpath('~/matlabplugins')
 sigma  = 0.6;
 k = 1/4;
 
-% load image
-img = imread(imgPath);
-img = rgb2gray(img);
-img = imresize(img,0.5);
+
 %imshow(img)
 
 sclaes = [];
@@ -69,6 +66,7 @@ extrmsIdx = 1;
 descriptorSet = {};
 descriptorSetIdx = 1;
 for i = 1:5
+    process = (i/5.0)
     for gLevel = 1+1:3-1
         
         k = int32(3*1.5*sigmas(gLevel));
@@ -83,7 +81,7 @@ for i = 1:5
         tempImg_lower = DOG{i}.gussian{gLevel-1};
         for m = 1+1+k:width-1-k
             for n = 1+1+k:height-1-k
-                [i,gLevel,m,n]
+                
                 current = tempImg(m,n);
                 
                 %search for 26 pixels around
@@ -150,7 +148,8 @@ for i = 1:5
                     end
                     %get descriptor from rotated image piece
                     descriptor = dscp(smallPieces_rot);
-                    descriptorSet{descriptorSetIdx} = descriptor;
+                    descriptorSet{descriptorSetIdx}.featureVector = descriptor;
+                    descriptorSet{descriptorSetIdx}.location = [n,m];
                     descriptorSetIdx = descriptorSetIdx+1;
                     %current
                     extrmsIdx = extrmsIdx +1;
@@ -192,7 +191,7 @@ hold off
 
 discriptorImage = zeros(descriptorSetIdx-1,128);
 for i = 1:length(descriptorSet)
-    discriptorImage(i,:) = descriptorSet{i};
+    discriptorImage(i,:) = descriptorSet{i}.featureVector;
 end
 figure()
 imshow(discriptorImage);
